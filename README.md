@@ -25,9 +25,13 @@
 
 ### Hooks
 React Hooks are functions that allow you to use state and other React features without writing a class component. They were introduced in React 16.8 to enable state and side-effect management in functional components, offering a more concise and expressive way to build components compared to class-based components.
-**useState**
+
+#### **useState**
+
 * sets the state
-**useEffect**
+  
+#### **useEffect**
+
 * Purpose: Handles side effects such as data fetching, subscriptions, or manually changing the DOM. It runs after the component renders.
 * Syntax: useEffect(() => { /* side effect */ }, [dependencies]);
 ``` Typescript
@@ -50,7 +54,9 @@ function FetchData() {
 }
 ```
 This makes sense because it'll show "Loading..." Until "setData()" is called, then it'll re-render the component. 
-**useContext**
+
+#### **useContext**
+
 * Purpose: Accesses the context value from a Context Provider. This hook helps in managing global state or passing data through the component tree without prop drilling.
 * Syntax: const contextValue = useContext(MyContext);
 * Kinda like global state, can be used to avoid prop drilling
