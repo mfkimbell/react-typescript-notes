@@ -43,10 +43,39 @@ React Hooks are functions that allow you to use state and other React features w
 Typing props
 <img width="465" alt="Screenshot 2024-08-09 at 12 54 48 PM" src="https://github.com/user-attachments/assets/78fbcc33-bc22-4dd1-afd3-f319e79cd760">
 
-``` Typescript basics
+Typescript basics
 
 <img width="750" alt="Screenshot 2024-08-09 at 1 00 12 PM" src="https://github.com/user-attachments/assets/444d5868-6fce-4c72-aae9-e88f3cef6fe0">
+<img width="737" alt="Screenshot 2024-08-09 at 1 46 35 PM" src="https://github.com/user-attachments/assets/1e7ad45c-b9de-481e-abe3-2fa2318a9705">
+<img width="715" alt="Screenshot 2024-08-09 at 1 47 29 PM" src="https://github.com/user-attachments/assets/ff058fa5-51c9-4477-bba0-e3934d1892e8">
+<img width="684" alt="Screenshot 2024-08-09 at 1 47 43 PM" src="https://github.com/user-attachments/assets/93afe168-12ac-4b0e-a7f1-37595b44d1fe">
 
+<img width="812" alt="Screenshot 2024-08-09 at 1 50 33 PM" src="https://github.com/user-attachments/assets/01a856fa-ba95-411c-836f-f154976b51f1">
+<img width="812" alt="Screenshot 2024-08-09 at 1 51 36 PM" src="https://github.com/user-attachments/assets/3ac9e230-7248-47ef-a0d5-07f747583d14">
+<img width="726" alt="Screenshot 2024-08-09 at 1 57 04 PM" src="https://github.com/user-attachments/assets/fa5b0d59-2c01-4fbf-8483-d6a087307d80">
+<img width="813" alt="Screenshot 2024-08-09 at 1 58 44 PM" src="https://github.com/user-attachments/assets/3c91fd2f-8c70-45d7-b138-6d11c76fe53c">
+<img width="764" alt="Screenshot 2024-08-09 at 2 00 16 PM" src="https://github.com/user-attachments/assets/6259fa0c-f574-43a7-9990-5f3d8890d4b5">
+
+```
+// Define a generic interface ListProps with a type parameter T
+interface ListProps<T> {
+  items: T[]; // An array of items of type T
+  renderItem: (item: T) => React.ReactNode; // A function that takes an item of type T and returns a React node
+}
+
+// Define a generic functional component List with a type parameter T
+function List<T>({ items, renderItem }: ListProps<T>) {
+  return <ul>{items.map(renderItem)}</ul>; // Render the items using the renderItem function
+}
+
+// Use the List component with a string type
+const stringList = <List items={['A', 'B', 'C']} renderItem={(item) => <li>{item}</li>} />;
+
+```
+We defined a function in the props as well as what the funciton should return. 
+
+
+```
 import React, { useState, useEffect } from 'react';
 
 function FetchData() {
