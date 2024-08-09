@@ -23,6 +23,7 @@ Map v.s. ForEach
 * Used to output different pages of the React application via different routes
 <img width="934" alt="Screenshot 2024-07-07 at 1 53 11 PM" src="https://github.com/mfkimbell/react-typescript-notes/assets/107063397/bc6d66ad-b3ba-4cf4-b59c-b34eb477f3bb">
 
+
 ### Props
 * passing props down through multiple layers is called prop drilling
 <img width="998" alt="Screenshot 2024-07-07 at 1 54 22 PM" src="https://github.com/mfkimbell/react-typescript-notes/assets/107063397/356d6619-5b3d-4b30-9d18-9f18b0479761">
@@ -42,6 +43,20 @@ React Hooks are functions that allow you to use state and other React features w
 ### React with Typescript
 Typing props
 <img width="465" alt="Screenshot 2024-08-09 at 12 54 48 PM" src="https://github.com/user-attachments/assets/78fbcc33-bc22-4dd1-afd3-f319e79cd760">
+
+<img width="775" alt="Screenshot 2024-08-09 at 3 36 55 PM" src="https://github.com/user-attachments/assets/7bcda5ad-aee2-4790-8b5d-02e5e791c0b0">
+<img width="799" alt="Screenshot 2024-08-09 at 3 37 30 PM" src="https://github.com/user-attachments/assets/81d799d7-c4d3-4b2c-a9a5-5b84d215b510">
+<img width="740" alt="Screenshot 2024-08-09 at 3 37 52 PM" src="https://github.com/user-attachments/assets/c3ddac77-241b-446b-84a8-cc55f1fc5bbb">
+
+### Here’s a concise difference between interface and type in TypeScript:
+
+* Use interface when you need to define the shape of an object, especially if you plan to extend it or use it with classes.
+* Use type when you need to define more complex types, like unions, intersections, or when you need to alias primitive types or other types.
+  
+In short:
+
+* interface = Best for objects and when you need to extend or implement.
+* type = Best for flexibility, including complex or composite types.
 
 Typescript basics
 
