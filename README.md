@@ -1,5 +1,9 @@
 # react-typescript-notes
 
+this video is good
+https://www.youtube.com/watch?v=wIyHSOugGGw
+
+
 # React
 
 ## Class and Function based components
