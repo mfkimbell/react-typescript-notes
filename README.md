@@ -1,10 +1,23 @@
 # react-typescript-notes
+<img width="1148" alt="Screenshot 2024-08-09 at 4 39 37 PM" src="https://github.com/user-attachments/assets/a6ca452e-d66d-4d9d-8250-679806954df2">
+<img width="1243" alt="Screenshot 2024-08-09 at 4 40 16 PM" src="https://github.com/user-attachments/assets/08a76e30-ffbe-49f9-a0fd-ad699eb32064">
+<img width="1258" alt="Screenshot 2024-08-09 at 4 42 27 PM" src="https://github.com/user-attachments/assets/9cb7a23c-6a1d-490a-84e7-4938ffa1612b">
 
-this video is good
+# this video is good, REWATCH IT, its SHORT
 https://www.youtube.com/watch?v=wIyHSOugGGw
 
 
 # React
+
+## Children
+* passing react components or JSX elements in props
+<img width="766" alt="Screenshot 2024-08-09 at 4 37 52 PM" src="https://github.com/user-attachments/assets/0d07a4d2-8ef5-4232-8740-80aaf3b9f659">
+
+## Keys
+<img width="811" alt="Screenshot 2024-08-09 at 4 38 46 PM" src="https://github.com/user-attachments/assets/63356f19-7b8e-4d9c-9664-85f2d10d18fd">
+
+* Keys are used to identify components in lists, they can be unique strings or numbers
+* 
 
 ## Class and Function based components
 * Function based components are becoming more popular and are considered the better option.
