@@ -7,6 +7,10 @@
 
 ## JSX (Javascript XML)
 
+Map v.s. ForEach 
+* Map alters and returns a new array
+* ForEach just goes though and performs an action, doesn't return a new array
+
 ### Subtle differences to html
 * class declarations are `className` instead of `class`
 * Inline styles are passed as an object
@@ -34,7 +38,15 @@ React Hooks are functions that allow you to use state and other React features w
 
 * Purpose: Handles side effects such as data fetching, subscriptions, or manually changing the DOM. It runs after the component renders.
 * Syntax: useEffect(() => { /* side effect */ }, [dependencies]);
-``` Typescript
+
+### React with Typescript
+Typing props
+<img width="465" alt="Screenshot 2024-08-09 at 12 54 48 PM" src="https://github.com/user-attachments/assets/78fbcc33-bc22-4dd1-afd3-f319e79cd760">
+
+``` Typescript basics
+
+<img width="750" alt="Screenshot 2024-08-09 at 1 00 12 PM" src="https://github.com/user-attachments/assets/444d5868-6fce-4c72-aae9-e88f3cef6fe0">
+
 import React, { useState, useEffect } from 'react';
 
 function FetchData() {
