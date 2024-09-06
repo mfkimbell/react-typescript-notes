@@ -72,8 +72,8 @@ Typing props
   
 In short:
 
-* interface = Best for objects and when you need to extend or implement, makes more sense when there are functions involved. 
-* type = Best for flexibility, including complex or composite types, you also wouldn't include functions. 
+* interface = Best for objects and when you need to extend or implement, **makes more sense when there are functions involved.** 
+* type = Best for flexibility, including complex or composite types, **you also wouldn't include functions.**
 
 Typescript basics
 
