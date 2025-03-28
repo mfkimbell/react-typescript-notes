@@ -1,4 +1,12 @@
 # react-typescript-notes
+
+
+#### How to cause an infinite loop in React?
+<img width="763" alt="Screenshot 2025-03-27 at 7 49 36 PM" src="https://github.com/user-attachments/assets/22af58c7-87c8-42da-9b6f-9f8ebac826bb" />
+Use effect with run on the first render and upon state change, we add the array of dependencies [] after to control which state causes it to run.
+
+#### UseContext is for sharing Data without props!!!
+
 <img width="1148" alt="Screenshot 2024-08-09 at 4 39 37 PM" src="https://github.com/user-attachments/assets/a6ca452e-d66d-4d9d-8250-679806954df2">
 <img width="1243" alt="Screenshot 2024-08-09 at 4 40 16 PM" src="https://github.com/user-attachments/assets/08a76e30-ffbe-49f9-a0fd-ad699eb32064">
 <img width="1258" alt="Screenshot 2024-08-09 at 4 42 27 PM" src="https://github.com/user-attachments/assets/9cb7a23c-6a1d-490a-84e7-4938ffa1612b">
@@ -49,6 +57,7 @@ Map v.s. ForEach
 
 ### Hooks
 
+## Very useful video about hoooks
 https://www.youtube.com/watch?v=TNhaISOUy6Q
 
 React Hooks are functions that allow you to use state and other React framework specific features without writing a **Class** component. They were introduced in React 16.8 to enable state and side-effect management in functional components, offering a more concise and expressive way to build components compared to class-based components.
