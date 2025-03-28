@@ -330,8 +330,11 @@ function CountdownTimer() {
   );
 }
 ```
+the `return` in the useEffect is a react default CLEANUP FUNCTION, so that's whhy the clearInterval only runs when it unmounts
+the dependency array decides whether the cleanup function is run. so it'll run if "running" changes. 
 
----
+---<img width="778" alt="Screenshot 2025-03-28 at 2 23 29 PM" src="https://github.com/user-attachments/assets/0700f89f-a091-4203-8b8d-af375e811101" />
+
 
 ### 🧠 Explanation of how it works:
 
