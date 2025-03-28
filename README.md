@@ -68,6 +68,8 @@ Just create files in the `/pages` directory — that's it!
 
 ### 🖥️ Server-Side Rendering in Next.js:
 
+SERVER SENDS FULLY RENDERED HTML TO THE BROWSWER (instead of the browser generating the html) so it's FASTER
+
 Next.js makes SSR super easy:
 
 ```tsx
