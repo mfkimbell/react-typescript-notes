@@ -1,5 +1,129 @@
 # react-typescript-notes
 
+#### NextJS vs React
+
+Great question — this one comes up *a lot* in interviews and real-world projects.
+
+Let’s break it down clearly:
+
+---
+
+## ⚛️ React vs. 🔼 Next.js
+
+| Concept               | **React**                           | **Next.js**                          |
+|------------------------|--------------------------------------|--------------------------------------|
+| What it is             | A **JavaScript library** for building UIs | A **framework** built on top of React |
+| Routing                | Manual (via `react-router-dom`)      | Built-in file-based routing           |
+| Server-side rendering  | Not built-in (needs custom setup)    | ✅ Built-in SSR (easy to use)         |
+| Static site generation | Manual (needs tooling)               | ✅ Built-in (`getStaticProps`)        |
+| Full-stack features    | ❌ Frontend only                     | ✅ Supports APIs (`/api` folder)      |
+| Configuration          | Up to you                            | Sensible defaults out of the box      |
+
+---
+
+### ⚛️ **React (alone)**
+
+React is mainly the **V (view)** in MVC. It handles **components, state, and rendering**, but leaves things like:
+- Routing
+- SSR
+- API calls
+- Optimization
+
+…up to **you**.
+
+#### 🔁 Routing in React:
+You use a package like `react-router-dom`:
+```jsx
+<Route path="/about" element={<About />} />
+```
+
+#### 🧠 Server-side rendering (SSR)?
+- Not included out of the box
+- Needs custom setup with something like Next.js, Express, or Remix
+
+---
+
+### 🔼 **Next.js (React with superpowers)**
+
+Next.js is a **React framework** that adds:
+- **Routing**
+- **SSR**
+- **Static site generation (SSG)**
+- **API routes**
+- **Image optimization**
+- **File-based pages**
+
+#### 🧭 Routing in Next.js:
+Just create files in the `/pages` directory — that's it!
+
+```bash
+/pages/index.tsx      -->  "/"
+/pages/about.tsx      -->  "/about"
+/pages/blog/[id].tsx  -->  "/blog/:id"
+```
+
+✅ No need for `react-router-dom` — it's automatic.
+
+---
+
+### 🖥️ Server-Side Rendering in Next.js:
+
+Next.js makes SSR super easy:
+
+```tsx
+export async function getServerSideProps() {
+  const res = await fetch('https://api.com/data');
+  const data = await res.json();
+
+  return {
+    props: { data },
+  };
+}
+```
+
+- Runs **on the server** at request time
+- Useful for dynamic, up-to-date content (like dashboards)
+
+---
+
+### 🧊 Static Site Generation (SSG) in Next.js:
+
+```tsx
+export async function getStaticProps() {
+  const res = await fetch('https://api.com/posts');
+  const data = await res.json();
+
+  return {
+    props: { data },
+  };
+}
+```
+
+- Runs **at build time**
+- Great for performance — pages are pre-rendered and fast
+
+---
+
+### ✅ TL;DR:
+
+| Feature                     | React                  | Next.js                             |
+|-----------------------------|-------------------------|--------------------------------------|
+| Routing                     | Manual w/ `react-router`| ✅ Built-in file-based routing        |
+| SSR (Server-side rendering) | ❌ Manual setup          | ✅ Easy with `getServerSideProps`     |
+| SSG                         | ❌ Manual                | ✅ Easy with `getStaticProps`         |
+| APIs                        | ❌ External only         | ✅ Can create `/api/hello.ts` etc.    |
+| Best for                    | Custom frontends        | Full-stack apps, SEO, performance    |
+
+---
+
+## Why do we care about a server side api?
+
+An API route is just a special kind of function — one that runs on the server, can safely talk to databases or external services, and responds to HTTP requests from the frontend (or any client).
+
+It feels like a function — but it’s part of how apps talk across the network securely and scalably.
+
+
+
 
 ## 🧠 JavaScript Refresher for React
 
