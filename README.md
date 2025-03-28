@@ -3,6 +3,8 @@
 <img width="1243" alt="Screenshot 2024-08-09 at 4 40 16 PM" src="https://github.com/user-attachments/assets/08a76e30-ffbe-49f9-a0fd-ad699eb32064">
 <img width="1258" alt="Screenshot 2024-08-09 at 4 42 27 PM" src="https://github.com/user-attachments/assets/9cb7a23c-6a1d-490a-84e7-4938ffa1612b">
 
+<img width="808" alt="Screenshot 2025-03-27 at 7 39 36 PM" src="https://github.com/user-attachments/assets/d662d17d-e9b8-40aa-9eaa-0471344dc7aa" />
+
 # this video is good, REWATCH IT, its SHORT
 https://www.youtube.com/watch?v=wIyHSOugGGw
 
