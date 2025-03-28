@@ -1,6 +1,275 @@
 # react-typescript-notes
 
 
+## 🧠 JavaScript Refresher for React
+
+---
+
+### 🔁 1. Array Methods – Must Know in React
+
+These are essential when working with dynamic lists or state updates:
+
+#### `.map()`
+Use to **render lists**:
+```jsx
+{items.map(item => (
+  <li key={item.id}>{item.name}</li>
+))}
+```
+
+#### `.filter()`
+Use to **conditionally exclude** elements:
+```js
+const visibleItems = items.filter(item => item.visible);
+```
+
+#### `.forEach()`
+Use for **side effects** (like logging), not rendering:
+```js
+items.forEach(item => console.log(item));
+```
+
+#### `.reduce()`
+Use to **calculate totals** or transform arrays:
+```js
+const total = items.reduce((sum, item) => sum + item.price, 0);
+```
+
+---
+
+### 🔄 2. Async JavaScript
+
+#### ✅ Callbacks (OLD AND OUTDATED ASYNC AND AWAIT IS MODERN)
+```js
+setTimeout(() => console.log("Hello"), 1000);
+```
+
+#### ✅ Promises (SAME HERE ASYNC AND AWAIT IS EASIER)
+```js
+fetch(url)
+  .then(res => res.json())
+  .then(data => console.log(data))
+  .catch(err => console.error(err));
+```
+
+#### ✅ Async/Await
+```js
+async function getData() {
+  const res = await fetch(url);
+  const data = await res.json();
+  return data;
+}
+```
+
+---
+
+### 🔥 3. Promises in `useEffect`
+
+Use `async` functions inside `useEffect` for data fetching:
+```js
+useEffect(() => {
+  async function fetchData() {
+    const res = await fetch('/api/data');
+    const json = await res.json();
+    setData(json);
+  }
+  fetchData();
+}, []);
+```
+
+Things to understand:
+- `fetch()`
+- `.then()` / `.catch()`
+- `try` / `catch` inside `async` functions
+
+---
+
+### 🧩 4. Destructuring
+
+#### Object:
+```js
+const { name } = person;
+```
+
+#### Array:
+```js
+const [first, second] = arr;
+```
+
+---
+
+### 📦 5. Spread / Rest
+
+#### Spread:
+```js
+const newArr = [...oldArr, 4];
+```
+
+#### Rest:
+```js
+const sum = (...nums) => nums.reduce((a, b) => a + b);
+```
+
+---
+
+### ⚖️ 6. Type Coercion: `==` vs `===`
+
+Always use `===` in React to avoid unexpected behavior:
+```jsx
+{count == '0'}   // ❌ unpredictable
+{count === 0}    // ✅ clean and safe
+```
+
+---
+
+Absolutely! Here's the full list again — **with an improved, clearer explanation for #2 (the React timer)** — and still **excluding** the Node prompt.
+
+---
+
+## ✅ React/JavaScript Interview Questions & Answers
+
+---
+
+### 🔹 **1. Implement a React service call to an API**
+
+**🧠 Question:**
+> How would you fetch data from an API in a React component?
+
+**✅ Answer:**
+Use `useEffect` to trigger the fetch when the component mounts, and `useState` to store the result:
+
+```tsx
+import { useEffect, useState } from 'react';
+
+function UsersList() {
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    async function fetchUsers() {
+      const res = await fetch('/api/users');
+      const data = await res.json();
+      setUsers(data);
+    }
+
+    fetchUsers();
+  }, []);
+
+  return (
+    <ul>
+      {users.map(user => <li key={user.id}>{user.name}</li>)}
+    </ul>
+  );
+}
+```
+
+---
+
+### 🔹 **2. UI Prompt in React to create a decrementing timer**
+
+**🧠 Question:**
+> How do you implement a countdown timer in React that starts when a button is clicked?
+
+**✅ Answer:**
+Use `useState` to track the remaining time and whether the timer is running, and `useEffect` with `setInterval` to count down every second.
+
+```tsx
+import { useEffect, useState } from 'react';
+
+function CountdownTimer() {
+  const [time, setTime] = useState(10);       // Starting time in seconds
+  const [running, setRunning] = useState(false); // Tracks if the timer is active
+
+  useEffect(() => {
+    if (!running) return; // Don’t run if timer hasn't started
+
+    const interval = setInterval(() => {
+      setTime(prev => {
+        if (prev <= 1) {
+          clearInterval(interval); // Stop at 0
+          return 0;
+        }
+        return prev - 1; // Decrease time by 1 every second
+      });
+    }, 1000);
+
+    // Cleanup to avoid memory leaks
+    return () => clearInterval(interval);
+  }, [running]);
+
+  return (
+    <div>
+      <h2>Time left: {time}</h2>
+      <button onClick={() => setRunning(true)}>Start</button>
+    </div>
+  );
+}
+```
+
+---
+
+### 🧠 Explanation of how it works:
+
+- `time` state holds the countdown value.
+- `running` state tracks whether the countdown has started.
+- `useEffect` runs when `running` becomes `true`.
+- `setInterval()` is used to tick the countdown every second.
+- When the timer reaches 0, the interval is cleared to stop counting.
+- We also clear the interval if the component unmounts or `running` changes — this prevents memory leaks.
+
+---
+
+### 🔹 **3. Consume endpoints and process data (filter/sort)**
+
+**🧠 Question:**
+> After fetching data from an API, how would you filter and sort it before displaying?
+
+**✅ Answer:**
+```tsx
+import { useEffect, useState } from 'react';
+
+function SortedUsers() {
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    async function fetchUsers() {
+      const res = await fetch('/api/users');
+      const data = await res.json();
+
+      // Keep only active users
+      const filtered = data.filter(user => user.active);
+
+      // Sort them alphabetically by name
+      const sorted = filtered.sort((a, b) => a.name.localeCompare(b.name));
+
+      setUsers(sorted);
+    }
+
+    fetchUsers();
+  }, []);
+
+  return (
+    <ul>
+      {users.map(user => <li key={user.id}>{user.name}</li>)}
+    </ul>
+  );
+}
+```
+
+---
+
+## 🧠 Summary Table
+
+| Concept                                   | Key Skills Tested                         | Tools/Concepts                       |
+|------------------------------------------|-------------------------------------------|--------------------------------------|
+| API Call in React                        | `useEffect`, `fetch`, `useState`          | React, async/await                   |
+| Countdown Timer                          | React state, intervals, side-effects      | `useState`, `useEffect`, `setInterval` |
+| Consume + Process API Data (filter/sort) | Array methods, state updates, rendering   | `.filter()`, `.sort()`, JSX          |
+
+---
+
+Let me know if you want to add search input, pagination, or TypeScript interfaces next!
+
+
 #### How to cause an infinite loop in React?
 <img width="763" alt="Screenshot 2025-03-27 at 7 49 36 PM" src="https://github.com/user-attachments/assets/22af58c7-87c8-42da-9b6f-9f8ebac826bb" />
 Use effect with run on the first render and upon state change, we add the array of dependencies [] after to control which state causes it to run.
