@@ -29,6 +29,78 @@ Async and Await is the more modern way to handle promises:
 
 <img width="796" alt="Screenshot 2025-03-31 at 8 29 29 PM" src="https://github.com/user-attachments/assets/b2f8ba3c-a197-4cd8-9b81-62448ec089b7" />
 
+#### Session Auth vs JWT Auth
+
+Sure! Here's a **super brief comparison** of **JWT vs Cookie/Session** auth in **Next.js**:
+
+---
+
+### 🔐 **JWT Auth (Stateless)**
+
+- Stores user info **in the token** (e.g. userId, email).
+- Sent in `Authorization` header:  
+  `Authorization: Bearer <token>`
+- Stored in **localStorage** or browser cookie storage 🍪.
+- ✅ Easy to use in APIs/microservices.  
+- ❌ Harder to revoke (token lives until expiry).  
+- ❌ Exposed if stored in `localStorage` (vulnerable to XSS).
+
+---
+
+### 🍪 **Session + Cookie Auth (Stateful)**
+
+- Stores user info **on the server** (e.g. Redis or DB).
+- Stores the session cookie in the Browser's Cookie Storage
+- Browser sends a **`sessionId` cookie automatically** on every request.
+- Cookie config: `httpOnly`, `secure`, `sameSite`.
+- ✅ Safer (cookie can’t be accessed by JS).
+- ✅ Easy to revoke by deleting session server-side.
+- ✅ Ideal for browser-based Next.js apps.
+
+THIS IS WHY ITS SAFE 
+
+<img width="792" alt="Screenshot 2025-04-01 at 12 00 56 PM" src="https://github.com/user-attachments/assets/8694dc38-5ab5-4ac7-bba0-192755801478" />
+
+---
+
+**✅ Recommendation for Next.js:**  
+Use **cookie + session auth** for secure, server-rendered apps.  
+Use **JWT** if you need mobile support or token-based APIs.
+
+#### Security
+
+`.env` files to store secrets
+
+#### How does the Virtual DOM work with React
+
+The Virtual DOM (VDOM) is a lightweight copy of the real DOM kept in memory.
+
+State or Prop Change:
+
+When your component state or props change, React creates a new Virtual DOM tree.
+
+Diffing:
+
+React compares the new tree with the old one (this is called **reconciliation**).
+
+React updates only the real DOM nodes that changed — not the whole page.
+
+
+#### What is JSX?
+
+JSX (JavaScript XML) is a syntax extension for JavaScript that looks like HTML but actually compiles to JavaScript.
+
+This is why `class=...` becomes `className=...`
+
+When You Run npm run build or npm start, JSX becomes Javscript?
+
+Then React uses that JavaScript to render HTML in the browser's DOM (or on the server if using SSR).
+
+
+
+
+
+
 #### NextJS vs React
 
 Great question — this one comes up *a lot* in interviews and real-world projects.
