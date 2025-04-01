@@ -5,7 +5,7 @@
 
 ### What is NodeJS?
 
-Node.js was created to run JavaScript on the server using an event-driven, non-blocking model powered by async/await, enabling lightweight and scalable apps. Unlike traditional runtimes that use multi-threaded, blocking I/O, Node.js handles many connections efficiently with a single thread using asynchronous code.
+Node.js was created to run JavaScript on the server using an event-driven, non-blocking model powered by async/await, enabling lightweight and scalable apps. Unlike traditional runtimes that use multi-threaded, blocking I/O, Node.js handles many connections efficiently with a single thread using asynchronous code (offloads work to other threads under the hood)
 
 The event loop is the core mechanism in Node.js that coordinates asynchronous (non-blocking) operations, such as file I/O, network requests, and timers, on a single JavaScript thread.
 
