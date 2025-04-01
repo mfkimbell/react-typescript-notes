@@ -3,13 +3,31 @@
 
 ## Twilio React Notes
 
+### What is NodeJS?
 
+Node.js was created to run JavaScript on the server using an event-driven, non-blocking model powered by async/await, enabling lightweight and scalable apps. Unlike traditional runtimes that use multi-threaded, blocking I/O, Node.js handles many connections efficiently with a single thread using asynchronous code.
 
+The event loop is the core mechanism in Node.js that coordinates asynchronous (non-blocking) operations, such as file I/O, network requests, and timers, on a single JavaScript thread.
 
+<img width="739" alt="Screenshot 2025-03-31 at 8 38 10 PM" src="https://github.com/user-attachments/assets/f811c3ab-5b22-4a72-b642-9d7e3cf34fc5" />
 
+In simpler terms:
 
+* Node.js runs JavaScript on one thread.
 
+* When an async task is triggered (e.g., reading a file, querying a database, and other I/O operations), Node offloads that task to a separate threadpool it keeps for IO tasks, freeing the main thread to keep doing other work.
+  
+Yes! 🙌 You're absolutely right — these days `we prefer async/await because it's cleaner and easier to read than callbacks`. But under the hood, both are doing async non-blocking I/O.
 
+* Once the operation completes, a callback (or Promise resolution) is queued, and the event loop eventually picks it up and runs it.
+
+Async and Await is the more modern way to handle promises:
+
+<img width="793" alt="Screenshot 2025-03-31 at 8 28 43 PM" src="https://github.com/user-attachments/assets/cacbddd1-5b95-45d9-ad96-8f47433dcdd5" />
+
+<img width="797" alt="Screenshot 2025-03-31 at 8 25 37 PM" src="https://github.com/user-attachments/assets/213b7382-3fab-43ee-af8f-8f5c0936fb13" />
+
+<img width="796" alt="Screenshot 2025-03-31 at 8 29 29 PM" src="https://github.com/user-attachments/assets/b2f8ba3c-a197-4cd8-9b81-62448ec089b7" />
 
 #### NextJS vs React
 
