@@ -29,7 +29,7 @@ Async and Await is the more modern way to handle promises:
 
 <img width="796" alt="Screenshot 2025-03-31 at 8 29 29 PM" src="https://github.com/user-attachments/assets/b2f8ba3c-a197-4cd8-9b81-62448ec089b7" />
 
-#### Session Auth vs JWT Auth
+### Session Auth vs JWT Auth
 
 Sure! Here's a **super brief comparison** of **JWT vs Cookie/Session** auth in **Next.js**:
 
@@ -67,11 +67,11 @@ THIS IS WHY ITS SAFE
 Use **cookie + session auth** for secure, server-rendered apps.  
 Use **JWT** if you need mobile support or token-based APIs.
 
-#### Security
+### Security
 
 `.env` files to store secrets
 
-#### How does the Virtual DOM work with React
+### How does the Virtual DOM work with React
 
 The Virtual DOM (VDOM) is a lightweight copy of the real DOM kept in memory.
 
@@ -86,7 +86,7 @@ React compares the new tree with the old one (this is called **reconciliation**)
 React updates only the real DOM nodes that changed — not the whole page.
 
 
-#### What is JSX?
+### What is JSX?
 
 JSX (JavaScript XML) is a syntax extension for JavaScript that looks like HTML but actually compiles to JavaScript.
 
@@ -101,7 +101,7 @@ Then React uses that JavaScript to render HTML in the browser's DOM (or on the s
 
 
 
-#### NextJS vs React
+### NextJS vs React
 
 Great question — this one comes up *a lot* in interviews and real-world projects.
 
@@ -132,13 +132,13 @@ React is mainly the **V (view)** in MVC. It handles **components, state, and ren
 
 …up to **you**.
 
-#### 🔁 Routing in React:
+### 🔁 Routing in React:
 You use a package like `react-router-dom`:
 ```jsx
 <Route path="/about" element={<About />} />
 ```
 
-#### 🧠 Server-side rendering (SSR)?
+### 🧠 Server-side rendering (SSR)?
 - Not included out of the box
 - Needs custom setup with something like Next.js, Express, or Remix
 
@@ -359,6 +359,10 @@ const newArr = [...oldArr, 4];
 const sum = (...nums) => nums.reduce((a, b) => a + b);
 ```
 
+<img width="806" alt="Screenshot 2025-04-01 at 6 26 30 PM" src="https://github.com/user-attachments/assets/9d87e2e4-d98e-4a1b-b62b-ca32543f4bd6" />
+
+Rest takes the input and automatically turns it into an array
+
 ---
 
 ### ⚖️ 6. Type Coercion: `==` vs `===`
@@ -456,6 +460,8 @@ function CountdownTimer() {
 the `return` in the useEffect is a react default CLEANUP FUNCTION, so that's whhy the clearInterval only runs when it unmounts
 the dependency array decides whether the cleanup function is run. so it'll run if "running" changes. 
 
+#### A memory leak would be caused if we hid the timer (making it unmount), but it doesn't clear the interval. Same if we paginated away from it. 
+
 ---<img width="778" alt="Screenshot 2025-03-28 at 2 23 29 PM" src="https://github.com/user-attachments/assets/0700f89f-a091-4203-8b8d-af375e811101" />
 
 
@@ -467,6 +473,12 @@ the dependency array decides whether the cleanup function is run. so it'll run i
 - `setInterval()` is used to tick the countdown every second.
 - When the timer reaches 0, the interval is cleared to stop counting.
 - We also clear the interval if the component unmounts or `running` changes — this prevents memory leaks.
+
+- When you pass a function to setState (prev => prev -1) (like setTime), React will automatically call your function with the most recent state value as the first argument.
+- 
+<img width="809" alt="Screenshot 2025-04-01 at 6 32 35 PM" src="https://github.com/user-attachments/assets/2b3b0724-32a3-49a5-b723-550d81249512" />
+
+<img width="820" alt="Screenshot 2025-04-01 at 6 35 38 PM" src="https://github.com/user-attachments/assets/1d7b4dfd-a0b0-45a3-8665-a49420c615d0" />
 
 ---
 
