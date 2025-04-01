@@ -64,6 +64,7 @@ Next.js is a **React framework** that adds:
 - **Image optimization**
 - **File-based pages**
 
+
 #### 🧭 Routing in Next.js:
 Just create files in the `/pages` directory — that's it!
 
@@ -135,8 +136,29 @@ An API route is just a special kind of function — one that runs on the server,
 
 It feels like a function — but it’s part of how apps talk across the network securely and scalably.
 
+## What is Static Site Generation
 
+SSR vs. SSG:
 
+SSR is dynamic per request—always fresh, but more server load.
+
+SSG is pre-built—very fast to serve, but data can be stale unless you rebuild. (data is stored as a zip in an S3 bucket usually)
+
+<img width="749" alt="Screenshot 2025-03-31 at 6 55 36 PM" src="https://github.com/user-attachments/assets/8e2d0703-ed68-4327-b3f5-c7ce4ef12f6a" />
+
+If you use a static site, you CANT do server side rendering because you no longer have a Node Server attached to it, it's JUST HTML AND REACT. 
+
+<img width="734" alt="Screenshot 2025-03-31 at 7 02 55 PM" src="https://github.com/user-attachments/assets/bd6e0425-421d-4433-b312-3adec69abc79" />
+
+A “static site” just means no dynamic, server-side rendering at request time.
+
+<img width="779" alt="Screenshot 2025-03-31 at 7 03 49 PM" src="https://github.com/user-attachments/assets/bdab0379-b677-4a9a-82e2-e285c6b5cca9" />
+
+<img width="793" alt="Screenshot 2025-03-31 at 7 12 33 PM" src="https://github.com/user-attachments/assets/27b6f711-b58f-46b4-adda-dacebdaf3c10" />
+
+So, even with a static site, you can still have a dynamic user experience after the page loads. The difference is that the server didn’t generate that new HTML on demand – the browser did it via React.
+
+The difference between a REGULAR REACT SITE and Static Site Geneartion is that HTML IS ALREADY BUILT WITH SOME DATA 
 
 ## 🧠 JavaScript Refresher for React
 
