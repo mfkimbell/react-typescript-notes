@@ -1,7 +1,108 @@
 # react-typescript-notes
 
-## Recoil
 
+## Code splitting
+
+
+### ⚛️ **React (Manual Code Splitting)**
+
+In plain React (like Create React App), you use `React.lazy()` + `Suspense` to split components manually:
+
+```tsx
+import React, { Suspense } from "react";
+
+const HeavyComponent = React.lazy(() => import("./HeavyComponent"));
+
+function App() {
+  return (
+    <div>
+      <h1>Hello</h1>
+      <Suspense fallback={<p>Loading...</p>}>
+        <HeavyComponent />
+      </Suspense>
+    </div>
+  );
+}
+```
+
+✅ This delays loading `HeavyComponent` until it's actually rendered.
+
+❌ Without this, **everything gets bundled into one big JS file**.
+
+---
+
+### 🧱 **Next.js (Automatic Page-Level Code Splitting)**
+
+> In Next.js, **every file inside the `/pages` directory is automatically code-split**.  
+> That means each route (like `/about`, `/dashboard`) loads only the JavaScript it needs.
+
+You don’t have to do anything — it’s built-in.
+
+For example:
+
+```bash
+/pages/index.tsx       → only loaded on homepage
+/pages/dashboard.tsx   → only loaded when you visit /dashboard
+```
+
+✅ You get faster load times  
+✅ No extra setup required  
+✅ Each page is its own JS chunk  
+✅ Add `dynamic()` for manual component-level splitting if needed
+
+```tsx
+import dynamic from "next/dynamic";
+
+const HeavyComponent = dynamic(() => import("../components/HeavyComponent"), {
+  loading: () => <p>Loading...</p>,
+});
+```
+
+---
+
+## ✅ TL;DR Summary
+
+| Feature             | React (`CRA`)                        | Next.js                            |
+|---------------------|--------------------------------------|-------------------------------------|
+| Code splitting      | Manual with `React.lazy()` + `Suspense` | Automatic for each `pages/` file     |
+| Component splitting | ✅ Manual with `lazy()`               | ✅ Optional with `dynamic()`         |
+| Route-level chunks  | ❌ No                                | ✅ Yes                              |
+| Optimization level  | Basic by default                    | Advanced, automatic, production-ready |
+
+---
+
+Let me know if you want a flashcard-style version or visual to memorize this fast!
+
+## performance
+
+React re-renders a component whenever its state or props change.
+
+Memoization means:
+“If the inputs didn’t change, don’t recalculate — just reuse the last result.”
+
+### React.memo
+
+Only rerenders if the PROPS BEING PASSSED have changed
+
+<img width="808" alt="Screenshot 2025-04-02 at 6 11 01 PM" src="https://github.com/user-attachments/assets/ae2703a6-6657-46d2-a5ca-986b82912f69" />
+
+IF we are using React.memo, an **inline function will get recreated every render so it will *LOOK* like new data is being passed in even when it isn't**
+
+<img width="835" alt="Screenshot 2025-04-02 at 6 14 41 PM" src="https://github.com/user-attachments/assets/f8494dc2-d2c7-45c2-8fa1-00f15579e68c" />
+
+
+### useMemo()
+
+```javascript
+const sortedData = useMemo(() => {
+  return bigData.sort((a, b) => a.value - b.value);
+}, [bigData]);
+```
+Without useMemo, this sort runs every render, even if bigData didn't change.
+
+
+
+## Recoil (global state manager)
 
 ### 🧱 `userAtom.ts` — define global state
 
@@ -50,7 +151,7 @@ Super clean. No reducers. No actions. Just reactive global state. ✅
 Let me know if you want to add selectors next!
 
 
-## Redux
+## Redux (global state manager)
 
 `UI → Dispatch → Reducer → Store → UI`
 
@@ -381,6 +482,23 @@ You use a package like `react-router-dom`:
 ## 🧠 Server-side rendering (SSR)?
 - Not included out of the box
 - Needs custom setup with something like Next.js, Express, or Remix
+
+How CSR works:
+The browser downloads your large JavaScript bundle, which then:
+* Loads React,
+* Fetches data (e.g., from an API),
+* And finally renders the UI.
+
+How SSR Works:
+Initial HTML:
+* The server runs your React code, fetches the necessary data, and renders a full HTML page with content included.
+* User sees: The complete page immediately upon loading—no spinner or blank screen.
+
+Afterward:
+* The browser downloads the JavaScript to "hydrate" the page (i.e., add interactivity), but the useful content is already visible.
+
+Total wait time: The server might take, say, 500ms to build the page, but once the HTML arrives, the user sees real content immediately.
+With SSR, the server sends fully rendered HTML (as opposed to building it  so users see useful content immediately—even if the page isn’t interactive yet. Then, as the JavaScript loads in the background, React “hydrates” the page, adding interactivity (like clickable buttons). This approach improves perceived performance because users don't stare at a blank screen or spinner; they see content right away, and then the functionality kicks in.
 
 ---
 
