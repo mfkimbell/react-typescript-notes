@@ -1,9 +1,238 @@
 # react-typescript-notes
 
+## Recoil
 
-## Twilio React Notes
 
-### What is NodeJS?
+### 🧱 `userAtom.ts` — define global state
+
+```ts
+import { atom } from "recoil";
+
+export const userAtom = atom({
+  key: "userAtom",
+  default: null,
+});
+```
+
+---
+
+### 🧪 `Profile.tsx` — use it like local state
+
+```tsx
+import { useRecoilState } from "recoil";
+import { userAtom } from "./userAtom";
+
+export default function Profile() {
+  const [user, setUser] = useRecoilState(userAtom);
+
+  return (
+    <div>
+      <p>Hi {user?.name || "Guest"}</p>
+      <button onClick={() => setUser({ name: "Alice" })}>Set User</button>
+      <button onClick={() => setUser(null)}>Clear User</button>
+    </div>
+  );
+}
+```
+
+---
+
+### ✅ TL;DR
+
+| What Recoil Gives You      | Redux Equivalent           |
+|----------------------------|----------------------------|
+| `atom()`                   | Redux slice state          |
+| `useRecoilState(atom)`     | `useSelector` + `dispatch` |
+| `setUser(data)` directly   | `dispatch(setUser(data))`  |
+
+Super clean. No reducers. No actions. Just reactive global state. ✅
+
+Let me know if you want to add selectors next!
+
+
+## Redux
+
+`UI → Dispatch → Reducer → Store → UI`
+
+<img width="766" alt="Screenshot 2025-04-02 at 5 45 20 PM" src="https://github.com/user-attachments/assets/ca641e89-2224-4063-ab3c-cc041943badf" />
+
+Absolutely! Here's a complete working setup for **Redux Toolkit with TypeScript in a Next.js project**, using your `useUser` hook and everything wired together.
+
+---
+
+### 🧱 1. `store.ts` — Redux store setup
+
+```ts
+// store.ts
+import { configureStore } from "@reduxjs/toolkit";
+import userReducer from "./userSlice"; // default export from userSlice
+
+export const store = configureStore({
+  reducer: {
+    user: userReducer, // this controls state.user
+  },
+});
+
+// TypeScript types
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
+```
+
+---
+
+### 🔧 2. `userSlice.ts` — Redux Toolkit slice
+
+```ts
+// userSlice.ts
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+
+type UserState = {
+  id: string;
+  name: string;
+  email: string;
+} | null;
+
+const initialState: UserState = null;
+
+const userSlice = createSlice({
+  name: "user",
+  initialState,
+  reducers: {
+    setUser: (state, action: PayloadAction<UserState>) => action.payload,
+    clearUser: () => null,
+  },
+});
+
+export const { setUser, clearUser } = userSlice.actions;
+export default userSlice.reducer; // 👈 this is the reducer you're importing as `userReducer`
+```
+
+---
+
+### ⚙️ 3. `useUser.ts` — Custom hook for user state
+
+```ts
+// useUser.ts
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "./store";
+import { setUser, clearUser } from "./userSlice";
+
+const useUser = () => {
+  const user = useSelector((state: RootState) => state.user);
+  const dispatch = useDispatch();
+
+  const updateUser = (userData: { id: string; name: string; email: string }) => {
+    dispatch(setUser(userData));
+  };
+
+  const clearUserData = () => {
+    dispatch(clearUser());
+  };
+
+  return { user, updateUser, clearUserData };
+};
+
+export default useUser;
+```
+
+---
+
+### 🌍 4. `_app.tsx` — Wrap the app in the Redux Provider
+
+```tsx
+// pages/_app.tsx
+import { Provider } from "react-redux";
+import { store } from "../store";
+import type { AppProps } from "next/app";
+
+function MyApp({ Component, pageProps }: AppProps) {
+  return (
+    <Provider store={store}>
+      <Component {...pageProps} />
+    </Provider>
+  );
+}
+
+export default MyApp;
+```
+
+---
+
+### 🧪 5. `pages/index.tsx` — Example usage in a page
+
+```tsx
+// pages/index.tsx
+import useUser from "../useUser";
+
+export default function HomePage() {
+  const { user, updateUser, clearUserData } = useUser();
+
+  return (
+    <div>
+      <h1>Welcome {user?.name || "Guest"}</h1>
+
+      <button
+        onClick={() =>
+          updateUser({
+            id: "1",
+            name: "Alice",
+            email: "alice@example.com",
+          })
+        }
+      >
+        Set User
+      </button>
+
+      <button onClick={clearUserData}>Clear User</button>
+    </div>
+  );
+}
+```
+
+---
+
+## ✅ Recap: What Each File Does
+
+| File           | Responsibility                            |
+|----------------|--------------------------------------------|
+| `store.ts`     | Creates the Redux store + root types       |
+| `userSlice.ts` | Contains user reducer + actions            |
+| `useUser.ts`   | Encapsulates Redux logic in a clean hook   |
+| `_app.tsx`     | Wraps app in the Redux `<Provider>`        |
+| `index.tsx`    | Example usage of the user state and hook   |
+
+
+
+## Lifting state up
+
+Lifting state up means moving a piece of useState to a common parent component, so two or more child components can share and update the same state.
+
+AKA we could move `setUsers` and `users` to a parent and pass it to children so  both children could have access to changing users 
+
+## Side Effects
+
+<img width="727" alt="Screenshot 2025-04-02 at 5 38 45 PM" src="https://github.com/user-attachments/assets/4accd059-14b9-499b-9361-362b8d014b98" />
+
+For React, A side effect is any code that runs outside of React’s render flow.
+
+<img width="768" alt="Screenshot 2025-04-02 at 5 37 55 PM" src="https://github.com/user-attachments/assets/37a57f57-a6a4-4f56-9e3b-60273bdaa785" />
+
+
+If you're touching anything React doesn’t manage directly, it’s probably a side effect — and should be done inside useEffect().
+
+React’s rendering should stay pure and predictable — side effects belong outside that cycle.
+
+## Custom Hooks
+
+Custom hooks are functions that **can use other react hooks** like useState, like in my project i have a `useUser` that automatically connects to Redux, gets the current user, and gives you functions to update or clear them — all in a clean, reusable way.
+
+## Props
+
+<img width="580" alt="Screenshot 2025-04-02 at 5 26 50 PM" src="https://github.com/user-attachments/assets/4630bdda-26a8-4bfa-abbf-be98d5017458" />
+
+If we DO want to change it, we generally pass a function to the child that calls it in the parent to actually change it.
+
+## What is NodeJS?
 
 Node.js was created to run JavaScript on the server using an event-driven, non-blocking model powered by async/await, enabling lightweight and scalable apps. Unlike traditional runtimes that use multi-threaded, blocking I/O, Node.js handles many connections efficiently with a single thread using asynchronous code (offloads work to other threads under the hood)
 
@@ -29,11 +258,11 @@ Async and Await is the more modern way to handle promises:
 
 <img width="796" alt="Screenshot 2025-03-31 at 8 29 29 PM" src="https://github.com/user-attachments/assets/b2f8ba3c-a197-4cd8-9b81-62448ec089b7" />
 
-#### Callbacks
+## Callbacks
 
 A callback is a function that is passed in to be called later, it was the old way of handling delays, we now use async/await
 
-### Session Auth vs JWT Auth
+## Session Auth vs JWT Auth
 
 Sure! Here's a **super brief comparison** of **JWT vs Cookie/Session** auth in **Next.js**:
 
@@ -78,11 +307,11 @@ To be clear **both are given their cookie from the backend** it's just what is i
 
 * JWT Auth: cookie is the 📦 that contains all the data inside
 
-### Security
+## Security
 
 `.env` files to store secrets
 
-### How does the Virtual DOM work with React
+## How does the Virtual DOM work with React
 
 The Virtual DOM (VDOM) is a lightweight copy of the real DOM kept in memory.
 
@@ -112,7 +341,7 @@ Then React uses that JavaScript to render HTML in the browser's DOM (or on the s
 
 
 
-### NextJS vs React
+## NextJS vs React
 
 Great question — this one comes up *a lot* in interviews and real-world projects.
 
@@ -133,7 +362,7 @@ Let’s break it down clearly:
 
 ---
 
-### ⚛️ **React (alone)**
+## ⚛️ **React (alone)**
 
 React is mainly the **V (view)** in MVC. It handles **components, state, and rendering**, but leaves things like:
 - Routing
@@ -143,13 +372,13 @@ React is mainly the **V (view)** in MVC. It handles **components, state, and ren
 
 …up to **you**.
 
-### 🔁 Routing in React:
+## 🔁 Routing in React:
 You use a package like `react-router-dom`:
 ```jsx
 <Route path="/about" element={<About />} />
 ```
 
-### 🧠 Server-side rendering (SSR)?
+## 🧠 Server-side rendering (SSR)?
 - Not included out of the box
 - Needs custom setup with something like Next.js, Express, or Remix
 
@@ -612,7 +841,8 @@ Most popular `onclick` `onChange` `onSubmit`
 
 ## Class and Function based components
 * Function based components are becoming more popular and are considered the better option.
-
+* Class compoenents are outdated and almost never necessary, they are OLD
+  
 ## JSX (Javascript XML)
 
 Map v.s. ForEach 
