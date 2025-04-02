@@ -29,6 +29,10 @@ Async and Await is the more modern way to handle promises:
 
 <img width="796" alt="Screenshot 2025-03-31 at 8 29 29 PM" src="https://github.com/user-attachments/assets/b2f8ba3c-a197-4cd8-9b81-62448ec089b7" />
 
+#### Callbacks
+
+A callback is a function that is passed in to be called later, it was the old way of handling delays, we now use async/await
+
 ### Session Auth vs JWT Auth
 
 Sure! Here's a **super brief comparison** of **JWT vs Cookie/Session** auth in **Next.js**:
@@ -66,6 +70,13 @@ THIS IS WHY ITS SAFE
 **✅ Recommendation for Next.js:**  
 Use **cookie + session auth** for secure, server-rendered apps.  
 Use **JWT** if you need mobile support or token-based APIs.
+
+To be clear **both are given their cookie from the backend** it's just what is in it:
+
+🧠 So yes — both can use cookies, but:
+* Session Auth: cookie is a 🔑 to server memory
+
+* JWT Auth: cookie is the 📦 that contains all the data inside
 
 ### Security
 
@@ -457,6 +468,28 @@ function CountdownTimer() {
   );
 }
 ```
+
+We use `() => { }` when we want to return a FUNCTION and not a FUNCTION CALL, arrow syntax also prevents scope issues and allows you to grab variables outside the function and avoid using `this`
+
+this:
+```javascript
+return () => clearInterval(interval);
+```
+is the same as this:
+
+```javascript
+function cleanup() {
+  clearInterval(interval);
+}
+return cleanup;
+```
+
+This is why we also use arrow funcrtions when we need to pass arguments on `onClick`, if we pass an EXECUTION, it will get called on page load:
+
+<img width="780" alt="Screenshot 2025-04-02 at 3 43 54 PM" src="https://github.com/user-attachments/assets/eaba7041-6d35-40b2-9a3d-64aaf3c28c90" />
+
+
+
 the `return` in the useEffect is a react default CLEANUP FUNCTION, so that's whhy the clearInterval only runs when it unmounts
 the dependency array decides whether the cleanup function is run. so it'll run if "running" changes. 
 
@@ -554,6 +587,13 @@ https://www.youtube.com/watch?v=wIyHSOugGGw
 # React
 
 ## Children
+
+A child component is any component rendered inside another component, even if you don’t pass it any props.
+
+<img width="832" alt="Screenshot 2025-04-02 at 4 01 53 PM" src="https://github.com/user-attachments/assets/ebbeb918-ccc5-45f7-8c68-8e37360ca890" />
+
+here is how you can access what was placed between a component, but remember, all a child is: whatever we put between a tag. Could be a <div> or a <p>
+
 * passing react components or JSX elements in props
 <img width="766" alt="Screenshot 2024-08-09 at 4 37 52 PM" src="https://github.com/user-attachments/assets/0d07a4d2-8ef5-4232-8740-80aaf3b9f659">
 
@@ -561,7 +601,14 @@ https://www.youtube.com/watch?v=wIyHSOugGGw
 <img width="811" alt="Screenshot 2024-08-09 at 4 38 46 PM" src="https://github.com/user-attachments/assets/63356f19-7b8e-4d9c-9664-85f2d10d18fd">
 
 * Keys are used to identify components in lists, they can be unique strings or numbers
-* 
+* usually you can use the current index:
+
+<img width="777" alt="Screenshot 2025-04-02 at 4 04 14 PM" src="https://github.com/user-attachments/assets/287d14fb-6557-46fc-8667-ce6441ab2a45" />
+
+## Events
+
+Most popular `onclick` `onChange` `onSubmit`
+
 
 ## Class and Function based components
 * Function based components are becoming more popular and are considered the better option.
