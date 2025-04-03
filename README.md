@@ -2,11 +2,33 @@
 
 ## NextJS updates
 
+## Redux is not about grabbing any data, it's about storing data that's going to need to be used everywhere
+
+<img width="581" alt="Screenshot 2025-04-03 at 6 51 17 PM" src="https://github.com/user-attachments/assets/3ba2b7fc-9c36-4208-9f6f-536f2314d2ef" />
+
+#statful vs stateless session management
+
+<img width="674" alt="Screenshot 2025-04-03 at 6 26 15 PM" src="https://github.com/user-attachments/assets/ed6812e5-9427-476e-9aa5-bd84d331b955" />
+
+<img width="757" alt="Screenshot 2025-04-03 at 6 30 17 PM" src="https://github.com/user-attachments/assets/9986809e-cff7-48cf-a1ea-b973757eb11c" />
+
+<img width="522" alt="Screenshot 2025-04-03 at 6 26 44 PM" src="https://github.com/user-attachments/assets/ab74ddc8-7dac-4aba-9407-6ab219fa6299" />
+
+<img width="813" alt="Screenshot 2025-04-03 at 6 27 34 PM" src="https://github.com/user-attachments/assets/3a80071a-40d7-4a8e-b483-7c1f5976b3a1" />
+
+<img width="784" alt="Screenshot 2025-04-03 at 6 32 32 PM" src="https://github.com/user-attachments/assets/a44b6453-426e-4aed-9010-a40d28cfbde6" />
+
+
 Absolutely — here's the **concise version**:
 
 ---
 
 ### ✅ In Next.js 13+ (`/app` directory):
+
+`server only` makes it so a server component is not accidentally imported to a client component, this is important for security when passing JWT tokesn
+<img width="799" alt="Screenshot 2025-04-03 at 5 51 42 PM" src="https://github.com/user-attachments/assets/b9c200f2-8fbc-4bfe-bedd-4f0206ceff35" />
+
+<img width="795" alt="Screenshot 2025-04-03 at 5 48 45 PM" src="https://github.com/user-attachments/assets/6a3fe48e-bb23-43cb-a314-ae826dba96c1" />
 
 - **Server Components are default** – every file is a Server Component unless marked otherwise.
 - To make a component run in the browser (and use things like `useState`, `useEffect`, `window`, etc.), you must add:
