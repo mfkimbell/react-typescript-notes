@@ -1,5 +1,189 @@
 # react-typescript-notes
 
+
+## Error handling (and specifics for NextJS SSR error handling)
+
+## Uncontrolled component
+
+Here's a super concise modern summary for error handling in React/Next.js:
+
+---
+
+**Modern Error Handling in React/Next.js:**
+
+- **Client-Side:**  
+  Use try/catch in async functions (in event handlers or within useEffect) to handle errors gracefully.
+
+- **Server-Side (Next.js):**  
+  Define a custom error page in `pages/_error.tsx`. When an error is thrown in `getServerSideProps` (or getStaticProps), Next.js automatically renders this error page instead of crashing.
+
+---
+
+### Example: Custom Error Page
+
+This is provided by default, but we can also make custom ones
+
+```tsx
+// pages/_error.tsx
+function ErrorPage({ statusCode }) {
+  return <p>{statusCode ? `Error ${statusCode}` : 'Client Error occurred.'}</p>;
+}
+
+ErrorPage.getInitialProps = ({ res, err }) => {
+  const statusCode = res ? res.statusCode : err ? err.statusCode : 404;
+  return { statusCode };
+};
+
+export default ErrorPage;
+```
+
+### Example: getServerSideProps with Error Handling
+
+```tsx
+export async function getServerSideProps() {
+  try {
+    const res = await fetch('https://api.example.com/data');
+    if (!res.ok) throw new Error('Fetch error');
+    const data = await res.json();
+    return { props: { data } };
+  } catch (error) {
+    // Let Next.js catch and display the error via _error.tsx
+    throw error;
+  }
+}
+```
+
+If you omit the try/catch and an error occurs in getServerSideProps, Next.js will catch the unhandled error and render your custom error page (if you have one) or its default error page. The try/catch is only needed if you want to handle the error (for example, log it or modify the response) before rethrowing it for Next.js to display the error page.
+
+Next.js provides a default error page out of the box, so you don't have to create one if you don't want to. However, many developers create a custom _error.tsx (or _error.js) to control the look and behavior of error displays for a better user experience.
+
+---
+
+**TL;DR:**  
+Modern error handling uses try/catch in async code for client-side errors, while Next.js automatically shows your custom `_error.tsx` page for errors in server-side data fetching (like in getServerSideProps), ensuring a robust user experience without manual intervention.
+
+> **Uncontrolled components grab data directly from the DOM**, using something like `useRef`, instead of storing it in React state.
+
+---
+
+### 🧠 Example:
+
+```tsx
+const inputRef = useRef();
+
+<input ref={inputRef} />
+```
+
+When you submit:
+```tsx
+console.log(inputRef.current.value); // ✅ read from the DOM
+```
+
+So yes — **`useRef` is how you access the input's value** in an uncontrolled component. No `useState`, no `onChange`, just the DOM doing its thing.
+
+You can also use `useRef` to simulate physical clicks on the screen
+
+## Hooks
+
+Hooks let you manage state, lifecycle, and logic in React function components. They're a way to “hook into” React features like state (`useState`) or side effects (`useEffect`) without writing a class.
+
+`useEffect` specifically handles things that happen **after render** — like interacting with the outside world. It's where you put **side effects**: things React doesn’t manage directly, like timeouts, APIs, or browser features. If you reuse that kind of logic across components, you’d move it into a custom hook.
+
+---
+
+### ✅ Common Side Effects with `useEffect` (and why)
+
+**📡 Getting data from an API**  
+React doesn’t fetch data for you — we do it after the component mounts.
+```tsx
+useEffect(() => {
+  fetch('/api').then(res => res.json()).then(setData);
+}, []);
+```
+
+---
+
+**⏱️ Waiting with a timeout**  
+Timers are outside React and need cleanup to avoid memory leaks.
+```tsx
+useEffect(() => {
+  const id = setTimeout(() => setShow(true), 1000);
+  return () => clearTimeout(id);
+}, []);
+```
+
+---
+
+**🔁 Repeating with an interval**  
+Same idea — React doesn't track intervals, so you manage setup and cleanup.
+```tsx
+useEffect(() => {
+  const id = setInterval(() => setCount(c => c + 1), 1000);
+  return () => clearInterval(id);
+}, []);
+```
+
+---
+
+**📝 Changing the page title**  
+Directly affects the DOM outside of React’s control.
+```tsx
+useEffect(() => {
+  document.title = `Count: ${count}`;
+}, [count]);
+```
+
+---
+
+**💾 Saving to localStorage**  
+React doesn’t persist data — you sync it manually when needed.
+```tsx
+useEffect(() => {
+  localStorage.setItem('theme', theme);
+}, [theme]);
+```
+
+---
+
+### ✅ TL;DR
+
+Use `useEffect` for anything **external to React’s render system** — data fetching, timers, DOM updates, or browser APIs. It gives you full control over when and how these side effects run and clean up.
+
+<img width="620" alt="Screenshot 2025-04-02 at 7 34 11 PM" src="https://github.com/user-attachments/assets/eeb0a11d-15f3-4871-95da-f4fab2b41f6f" />
+
+<img width="527" alt="Screenshot 2025-04-02 at 7 34 36 PM" src="https://github.com/user-attachments/assets/72e566e2-8d32-47f7-992d-2f98538dae17" />
+
+## Very useful video about hoooks
+https://www.youtube.com/watch?v=TNhaISOUy6Q
+
+React Hooks are functions that allow you to use state and other React framework specific features without writing a **Class** component. They were introduced in React 16.8 to enable state and side-effect management in functional components, offering a more concise and expressive way to build components compared to class-based components.
+
+### **useEffect**
+
+* Purpose: Handles side effects such as data fetching, subscriptions, or manually changing the DOM. It runs after the component renders.
+* Syntax: useEffect(() => { /* side effect */ }, [dependencies]);
+  
+Here are some component lifecycle side effects that can happen:
+
+<img width="789" alt="Screenshot 2024-09-06 at 2 48 12 PM" src="https://github.com/user-attachments/assets/2d39cdd5-9190-4f76-83bb-8081a82fe3ca">
+
+This is an example of it running our function (our side effect) on first render (initialized) and whenever stateful data changes:
+
+<img width="1047" alt="Screenshot 2024-09-06 at 2 49 19 PM" src="https://github.com/user-attachments/assets/6a7425d9-d343-45d8-bcbd-b7477feb43ee">
+
+This would cause an infinite loop, cause it reruns after it alters the stateful data:
+
+<img width="996" alt="Screenshot 2024-09-06 at 2 51 22 PM" src="https://github.com/user-attachments/assets/75227ba9-5d26-4d3e-ac54-51b8381ee590">
+
+This is the fix, no dependencies means it'll only run once when the component is initialized:
+
+<img width="652" alt="Screenshot 2024-09-06 at 2 53 25 PM" src="https://github.com/user-attachments/assets/3a597f12-7ccd-41a7-a121-e6f85b6816ed">
+
+Now it will run when "count" changes:
+
+<img width="790" alt="Screenshot 2024-09-06 at 3 07 31 PM" src="https://github.com/user-attachments/assets/16563ea4-a1e9-43c1-aa31-a85dc648144b">
+
+
 ## When to split a component
 
 
@@ -391,6 +575,8 @@ React’s rendering should stay pure and predictable — side effects belong out
 Custom hooks are functions that **can use other react hooks** like useState, like in my project i have a `useUser` that automatically connects to Redux, gets the current user, and gives you functions to update or clear them — all in a clean, reusable way.
 
 ## Props
+
+Props are meant to be read-only in React because they represent data passed down from a parent. Making them immutable ensures a one-way data flow, which is one of the core principles of React.
 
 <img width="580" alt="Screenshot 2025-04-02 at 5 26 50 PM" src="https://github.com/user-attachments/assets/4630bdda-26a8-4bfa-abbf-be98d5017458" />
 
@@ -1172,41 +1358,6 @@ Map v.s. ForEach
 * passing props down through multiple layers is called prop drilling
 <img width="998" alt="Screenshot 2024-07-07 at 1 54 22 PM" src="https://github.com/mfkimbell/react-typescript-notes/assets/107063397/356d6619-5b3d-4b30-9d18-9f18b0479761">
 
-## Hooks
-
-<img width="620" alt="Screenshot 2025-04-02 at 7 34 11 PM" src="https://github.com/user-attachments/assets/eeb0a11d-15f3-4871-95da-f4fab2b41f6f" />
-
-<img width="527" alt="Screenshot 2025-04-02 at 7 34 36 PM" src="https://github.com/user-attachments/assets/72e566e2-8d32-47f7-992d-2f98538dae17" />
-
-## Very useful video about hoooks
-https://www.youtube.com/watch?v=TNhaISOUy6Q
-
-React Hooks are functions that allow you to use state and other React framework specific features without writing a **Class** component. They were introduced in React 16.8 to enable state and side-effect management in functional components, offering a more concise and expressive way to build components compared to class-based components.
-
-### **useEffect**
-
-* Purpose: Handles side effects such as data fetching, subscriptions, or manually changing the DOM. It runs after the component renders.
-* Syntax: useEffect(() => { /* side effect */ }, [dependencies]);
-  
-Here are some component lifecycle side effects that can happen:
-
-<img width="789" alt="Screenshot 2024-09-06 at 2 48 12 PM" src="https://github.com/user-attachments/assets/2d39cdd5-9190-4f76-83bb-8081a82fe3ca">
-
-This is an example of it running our function (our side effect) on first render (initialized) and whenever stateful data changes:
-
-<img width="1047" alt="Screenshot 2024-09-06 at 2 49 19 PM" src="https://github.com/user-attachments/assets/6a7425d9-d343-45d8-bcbd-b7477feb43ee">
-
-This would cause an infinite loop, cause it reruns after it alters the stateful data:
-
-<img width="996" alt="Screenshot 2024-09-06 at 2 51 22 PM" src="https://github.com/user-attachments/assets/75227ba9-5d26-4d3e-ac54-51b8381ee590">
-
-This is the fix, no dependencies means it'll only run once when the component is initialized:
-
-<img width="652" alt="Screenshot 2024-09-06 at 2 53 25 PM" src="https://github.com/user-attachments/assets/3a597f12-7ccd-41a7-a121-e6f85b6816ed">
-
-Now it will run when "count" changes:
-
-<img width="790" alt="Screenshot 2024-09-06 at 3 07 31 PM" src="https://github.com/user-attachments/assets/16563ea4-a1e9-43c1-aa31-a85dc648144b">
 
 ### **useContext()**
 
