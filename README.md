@@ -56,6 +56,9 @@ You can also use `useRef` to simulate physical clicks on the screen
 
 ## Hooks
 
+<img width="755" alt="Screenshot 2025-04-03 at 2 26 03 PM" src="https://github.com/user-attachments/assets/81d54eb9-8a6f-4ce0-a66d-ec7d8047bec6" />
+
+
 Hooks let you manage state, lifecycle, and logic in React function components. They're a way to “hook into” React features like state (`useState`) or side effects (`useEffect`) without writing a class.
 
 `useEffect` specifically handles things that happen **after render** — like interacting with the outside world. It's where you put **side effects**: things React doesn’t manage directly, like timeouts, APIs, or browser features. If you reuse that kind of logic across components, you’d move it into a custom hook.
