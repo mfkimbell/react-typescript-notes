@@ -25,64 +25,13 @@ So if something fails during that process:
 Normal error handling (like `try/catch` + state) works **after** a component renders.  
 For server-side failures, React never runs — so **Next.js catches the error** and shows `_error.tsx` instead.
 
-## Uncontrolled component
 
-Here's a super concise modern summary for error handling in React/Next.js:
-
----
-
-**Modern Error Handling in React/Next.js:**
-
-- **Client-Side:**  
-  Use try/catch in async functions (in event handlers or within useEffect) to handle errors gracefully.
-
-- **Server-Side (Next.js):**  
-  Define a custom error page in `pages/_error.tsx`. When an error is thrown in `getServerSideProps` (or getStaticProps), Next.js automatically renders this error page instead of crashing.
-
----
-
-### Example: Custom Error Page
-
-This is provided by default, but we can also make custom ones
-
-```tsx
-// pages/_error.tsx
-function ErrorPage({ statusCode }) {
-  return <p>{statusCode ? `Error ${statusCode}` : 'Client Error occurred.'}</p>;
-}
-
-ErrorPage.getInitialProps = ({ res, err }) => {
-  const statusCode = res ? res.statusCode : err ? err.statusCode : 404;
-  return { statusCode };
-};
-
-export default ErrorPage;
-```
-
-### Example: getServerSideProps with Error Handling
-
-```tsx
-export async function getServerSideProps() {
-  try {
-    const res = await fetch('https://api.example.com/data');
-    if (!res.ok) throw new Error('Fetch error');
-    const data = await res.json();
-    return { props: { data } };
-  } catch (error) {
-    // Let Next.js catch and display the error via _error.tsx
-    throw error;
-  }
-}
-```
-
-If you omit the try/catch and an error occurs in getServerSideProps, Next.js will catch the unhandled error and render your custom error page (if you have one) or its default error page. The try/catch is only needed if you want to handle the error (for example, log it or modify the response) before rethrowing it for Next.js to display the error page.
-
-Next.js provides a default error page out of the box, so you don't have to create one if you don't want to. However, many developers create a custom _error.tsx (or _error.js) to control the look and behavior of error displays for a better user experience.
-
----
 
 **TL;DR:**  
 Modern error handling uses try/catch in async code for client-side errors, while Next.js automatically shows your custom `_error.tsx` page for errors in server-side data fetching (like in getServerSideProps), ensuring a robust user experience without manual intervention.
+
+## Uncontrolled component
+
 
 > **Uncontrolled components grab data directly from the DOM**, using something like `useRef`, instead of storing it in React state.
 
