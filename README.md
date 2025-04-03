@@ -19,6 +19,8 @@ So if something fails during that process:
 
 ---
 
+<img width="611" alt="Screenshot 2025-04-03 at 2 23 16 PM" src="https://github.com/user-attachments/assets/69092179-21c6-4547-9926-0f6fbafeeb95" />
+
 ### TL;DR  
 Normal error handling (like `try/catch` + state) works **after** a component renders.  
 For server-side failures, React never runs — so **Next.js catches the error** and shows `_error.tsx` instead.
