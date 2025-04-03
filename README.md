@@ -1,5 +1,128 @@
 # react-typescript-notes
 
+## NextJS updates
+
+Absolutely — here's the **concise version**:
+
+---
+
+### ✅ In Next.js 13+ (`/app` directory):
+
+- **Server Components are default** – every file is a Server Component unless marked otherwise.
+- To make a component run in the browser (and use things like `useState`, `useEffect`, `window`, etc.), you must add:
+
+```tsx
+'use client';
+```
+
+---
+
+### 🧠 Summary:
+
+| Component Type     | Default in `/app` | Needs `'use client'` | Can use `useEffect`, `useState` | Runs on Server |
+|--------------------|-------------------|-----------------------|-------------------------------|----------------|
+| Server Component   | ✅ Yes            | ❌ No                 | ❌ No                          | ✅ Yes         |
+| Client Component   | ❌ No             | ✅ Yes                | ✅ Yes                         | ❌ No          |
+
+---
+
+### ✅ When to use `'use client'`
+
+Use `'use client'` when:
+- You need **interactivity**
+- You’re using `useState`, `useEffect`, `useContext`, etc.
+- You rely on **browser-only APIs** like `localStorage`, `document`, `window`, etc.
+
+
+
+---
+
+### 🤔 Wait… If `useState` is so common, why isn’t `'use client'` the default?
+
+Because **Server Components don’t run in the browser** — they’re for **rendering HTML on the server**, not handling interactions like clicks, forms, etc.
+
+---
+
+### ✅ `'use client'` = make it interactive
+
+You only need `'use client'` when you want **interactivity**, like:
+
+- `useState` (local state)
+- `useEffect` (side effects)
+- `onClick`, `onChange`, etc.
+- `localStorage`, `window`, `document`
+- animations, modals, etc.
+
+```tsx
+'use client';
+
+import { useState } from 'react';
+
+export default function Counter() {
+  const [count, setCount] = useState(0);
+
+  return <button onClick={() => setCount(count + 1)}>Count: {count}</button>;
+}
+```
+
+---
+
+### 🔥 Why not make all components client?
+
+Because **Server Components are faster, smaller, and better for SEO**.
+
+- No JavaScript needed on the client
+- Streams straight HTML to the browser
+- Can fetch data server-side *in the component*
+
+You only make something a client component if it needs to be interactive.
+
+---
+
+### TL;DR
+
+| Want to show static data?   | ✅ Server Component (default) |
+| Want to click things / update state? | 👉 `'use client'` |
+
+**Yes — it really is that beneficial**, especially for **performance**, **SEO**, and **user experience**. Here's the quick breakdown:
+
+---
+
+### 🚀 Benefits of "no JavaScript needed on the client"
+
+1. **⚡ Faster page load**  
+   - No JS bundle = less to download, parse, and execute
+   - HTML is ready-to-render → the browser can show it immediately
+
+2. **📈 Better Lighthouse/Google scores**  
+   - Lower JS = better scores for performance, SEO, and accessibility
+
+3. **🧠 Instant time-to-content**  
+   - Server-rendered HTML streams in fast — great for users on slow devices or networks
+
+4. **🔍 SEO wins**  
+   - Google prefers HTML it can read right away (no waiting for React to hydrate content)
+
+5. **📉 Less JavaScript = less memory usage**  
+   - Mobile devices especially benefit from fewer scripts and smaller memory footprints
+
+6. **🧊 You can still hydrate interactivity**  
+   - Add `'use client'` *only* to interactive bits — no need to ship React for your whole app
+
+---
+
+<img width="765" alt="Screenshot 2025-04-03 at 4 38 30 PM" src="https://github.com/user-attachments/assets/a87eeb41-459f-451a-b20b-2ec23226970e" />
+
+### TL;DR
+
+| Fewer client-side components = ✅ Less JS |
+| Less JS = ✅ Faster load, better SEO, happier users |
+
+These new `server components` really do make a difference:
+
+<img width="758" alt="Screenshot 2025-04-03 at 4 39 40 PM" src="https://github.com/user-attachments/assets/785e5957-7c1a-4eb9-8fbe-28656b62b2fa" />
+
+
 <img width="755" alt="Screenshot 2025-04-03 at 2 42 18 PM" src="https://github.com/user-attachments/assets/ca9f0e27-b628-467c-bf00-39e00ebfebf8" />
 
 ## Error handling (and specifics for NextJS SSR error handling)
@@ -396,6 +519,7 @@ export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 ```
 
+
 ---
 
 ### 🔧 2. `userSlice.ts` — Redux Toolkit slice
@@ -425,6 +549,7 @@ export const { setUser, clearUser } = userSlice.actions;
 export default userSlice.reducer; // 👈 this is the reducer you're importing as `userReducer`
 ```
 
+
 ---
 
 ### ⚙️ 3. `useUser.ts` — Custom hook for user state
@@ -452,7 +577,47 @@ const useUser = () => {
 
 export default useUser;
 ```
+To be clear, state is the WHOLE redux store, and to select one of the slices we do state.user, or state.transaactions
 
+
+---
+
+### ✅ 1. What you're seeing:
+
+```ts
+reducers: {
+  setUser: (state, action) => action.payload,
+}
+```
+
+- `setUser` = object key  
+- `(state, action) => ...` = arrow function as the value
+
+---
+
+### ✅ 2. Same logic using function shorthand:
+
+```ts
+reducers: {
+  setUser(state, action) {
+    return action.payload;
+  }
+}
+```
+
+---
+
+### ✅ 3. What it’s like in plain JS:
+
+```ts
+const obj = {
+  sayHi: () => console.log("hi")
+}
+```
+
+---
+
+> You're assigning a **function as a value inside an object** using `:` — that’s just how object literals work in JavaScript.
 ---
 
 ### 🌍 4. `_app.tsx` — Wrap the app in the Redux Provider
@@ -736,6 +901,19 @@ Next.js is a **React framework** that adds:
 - **Image optimization**
 - **File-based pages**
 
+Difference between SSG and CreatReactApp or Vite is that 
+<img width="785" alt="Screenshot 2025-04-03 at 4 12 36 PM" src="https://github.com/user-attachments/assets/bad812ad-36d6-4050-ba7e-80d45e149a8d" />
+
+<img width="797" alt="Screenshot 2025-04-03 at 4 14 31 PM" src="https://github.com/user-attachments/assets/aade6296-65d3-4449-9b2c-ce86a15661ea" />
+
+Here's a concise explanation:
+
+- **Hydration** means attaching interactivity (event listeners, state management, etc.) to already-rendered HTML in the browser—it doesn't generate the HTML.
+- In **CRA/Vite**, the index.html is mostly an empty container (e.g. `<div id="root"></div>`). The browser downloads the JS bundle and React **builds all the HTML** on the client, then hydrates that markup.
+- In **Next.js with SSG**, the HTML is **pre-generated on the server (or at build time)**. When a user visits the page, they immediately see the full, static HTML content. Later, React hydrates it in the browser to make it interactive.
+- So, the key difference is that in SSG the non-root (actual) HTML is created ahead of time, while in CRA the HTML is generated by the browser. In both cases, hydration (adding functionality) happens in the browser.
+
+This clarifies that I was mistaken if I implied hydration builds the HTML—it only adds interactivity to HTML that's already there.
 
 #### 🧭 Routing in Next.js:
 Just create files in the `/pages` directory — that's it!
