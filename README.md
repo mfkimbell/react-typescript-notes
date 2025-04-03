@@ -1,8 +1,65 @@
 # react-typescript-notes
 
+## When to split a component
+
+
+### ✅ 1. **It's getting too large or doing too much**
+- Hard to read, maintain, or test
+- Has multiple responsibilities (e.g. rendering UI **and** managing complex logic)
+
+> 🧠 A component should ideally “do one thing well”
+
+---
+
+### ✅ 2. **You want to reuse a part of it elsewhere**
+- Same UI appears in multiple places
+- You need to pass it different props in different contexts
+
+> 🧠 Reusability = extract it into its own component
+
+
+## State
+
+state = data managed within component
+props = data passed into a component
+
+Absolutely — here's the version with **Recoil** instead of Zustand:
+
+---
+
+### ✅ `useState`  
+Local state for a single component  
+→ UI toggles, form inputs, modals
+
+### 🌐 `Context`  
+Share simple global data  
+→ Theme, user, language — avoid prop drilling
+
+### 🧱 External State (Redux, Recoil)  
+Complex app-wide state  
+→ Auth, carts, caching, cross-page or multi-tab sync
+
+---
+
+Let me know if you want a tiny decision table format for this too!
+
+## Unit testing
+
+<img width="739" alt="Screenshot 2025-04-02 at 7 29 43 PM" src="https://github.com/user-attachments/assets/efc0b334-67c0-46eb-aa28-26eef3129058" />
+
+<img width="763" alt="Screenshot 2025-04-02 at 7 30 23 PM" src="https://github.com/user-attachments/assets/3de51435-b80b-4f61-9ffe-91b8453d125f" />
+
+So if we were unit testing a button, we wouldn't care how it **renders in a form** we only care about it being rendered by itself, we only care about the logic in the button if it is WITHIN the component. 
+
+<img width="473" alt="Screenshot 2025-04-02 at 7 31 26 PM" src="https://github.com/user-attachments/assets/4eec4f4f-8ed4-45b7-b777-c46d1e28e5c9" />
+
+## Inheritance vs Composition
+
+React prefers composition
+
+<img width="791" alt="Screenshot 2025-04-02 at 7 26 52 PM" src="https://github.com/user-attachments/assets/8599e5c4-5669-4100-a80b-218cd32bb52f" />
 
 ## Code splitting
-
 
 ### ⚛️ **React (Manual Code Splitting)**
 
@@ -552,6 +609,38 @@ export async function getServerSideProps() {
 - Runs **on the server** at request time
 - Useful for dynamic, up-to-date content (like dashboards)
 
+### 🧠 What is getServerSideProps?
+* `getServerSideProps` is a special Next.js function that runs on the server before rendering a page.
+It fetches data on every request, then passes it to your component as props.
+
+`Yes, your component receives props, but they're generated server-side and used to pre-render the UI before it's delivered to the user.`
+
+```javascript
+// pages/user.tsx
+
+export default function UserPage({ user }) {
+  return (
+    <div>
+      <h1>Welcome, {user.name}!</h1>
+      <p>Email: {user.email}</p>
+    </div>
+  );
+}
+
+// This runs ONLY on the server per request
+export async function getServerSideProps() {
+  const res = await fetch('https://api.example.com/user');
+  const user = await res.json();
+
+  return {
+    props: {
+      user, // 👈 becomes a prop to <UserPage />
+    },
+  };
+}
+```
+<img width="681" alt="Screenshot 2025-04-02 at 8 02 19 PM" src="https://github.com/user-attachments/assets/46e0b0aa-ba93-488e-bae2-30314263f6e0" />
+
 ---
 
 ### 🧊 Static Site Generation (SSG) in Next.js:
@@ -846,9 +935,102 @@ This is why we also use arrow funcrtions when we need to pass arguments on `onCl
 the `return` in the useEffect is a react default CLEANUP FUNCTION, so that's whhy the clearInterval only runs when it unmounts
 the dependency array decides whether the cleanup function is run. so it'll run if "running" changes. 
 
+## Memory Leaks
+
+Memory leaks happen when an async task outlives the component and tries to do something like setState() after it's unmounted.
+
+Absolutely! Here's just the table for quick reference 👇
+
+---
+
+### ✅ Common Async Actions That Can Cause Memory Leaks
+
+| Type             | Example                            | Why it's Risky                                  |
+|------------------|-------------------------------------|-------------------------------------------------|
+| 🛰️ `fetch` / `axios`  | `fetch('/api/data')`             | Might resolve **after** the component unmounts |
+| ⏱️ `setTimeout`       | `setTimeout(() => ..., 3000)`    | Might fire after the component is gone         |
+| 🔁 `setInterval`      | `setInterval(() => ..., 1000)`   | Keeps running unless you manually stop it      |
+| 🔌 Subscriptions      | WebSocket, Event listeners       | Keep running unless unsubscribed               |
+| 📦 Promises           | `someAsyncFn().then(...)`        | Still async under the hood                     |
+
+---
+
+
 #### A memory leak would be caused if we hid the timer (making it unmount), but it doesn't clear the interval. Same if we paginated away from it. 
 
 ---<img width="778" alt="Screenshot 2025-03-28 at 2 23 29 PM" src="https://github.com/user-attachments/assets/0700f89f-a091-4203-8b8d-af375e811101" />
+
+
+<img width="786" alt="Screenshot 2025-04-02 at 7 35 40 PM" src="https://github.com/user-attachments/assets/54b8c630-cd9d-4116-81ef-75c4d56b64d5" />
+
+Fixing `fetch` memory leaks
+
+<img width="337" alt="Screenshot 2025-04-02 at 7 35 57 PM" src="https://github.com/user-attachments/assets/7a39a5b6-bb96-4914-89a8-c6373b756156" />
+
+
+
+<img width="675" alt="Screenshot 2025-04-02 at 7 40 52 PM" src="https://github.com/user-attachments/assets/0d78eb1b-000a-44e1-9fbf-05678cee6cfa" />
+
+But if you're fetching data inside `useEffect`
+
+, use `AbortController`
+`AbortController` lets us cancel the fetch if the component unmounts
+
+<img width="687" alt="Screenshot 2025-04-02 at 7 42 56 PM" src="https://github.com/user-attachments/assets/29f1b4aa-349f-4839-93b1-377a75a01b67" />
+
+### Fetch based memory leaks are solved by getServerSideProps aka Server Side Rendering (SSR), timeout memory leaks would still be relevan however
+
+<img width="681" alt="Screenshot 2025-04-02 at 8 02 19 PM" src="https://github.com/user-attachments/assets/46e0b0aa-ba93-488e-bae2-30314263f6e0" />
+
+
+Fixing `timeout` memory leaks:
+
+<img width="784" alt="Screenshot 2025-04-02 at 7 45 27 PM" src="https://github.com/user-attachments/assets/98735f42-9170-427d-8acb-7d8798975c74" />
+
+
+
+> ❗ We worry about **memory leaks only when calling APIs from inside components** — regardless of **when** it's triggered.
+
+---
+
+### ✅ Safe from memory leaks:
+| Where it's called                     | Why it's safe                           |
+|--------------------------------------|------------------------------------------|
+| `getServerSideProps()`               | Runs only once on the server             |
+| `getStaticProps()`                   | Runs at build time (no live lifecycle)   |
+| Global state managers (Redux, etc.)  | Outside of component lifecycle           |
+| Inside a user action **that finishes quickly** | Component likely stays mounted |
+
+
+---
+
+<img width="812" alt="Screenshot 2025-04-02 at 8 08 55 PM" src="https://github.com/user-attachments/assets/384c2fa1-1eaa-40d3-a9c9-4d1e5eabd14f" />
+
+
+### ⚠️ Can cause memory leaks:
+| Situation                                 | Why it's risky                           |
+|------------------------------------------|------------------------------------------|
+| API calls in `useEffect()`               | If component unmounts before it completes |
+| Long-running API calls (user stays < page) | May still resolve after unmount          |
+| Forgetting to use `AbortController`      | Will try `setState` on unmounted component |
+
+---
+
+### ✅ So when do you care?
+
+You need to prevent memory leaks **anytime:**
+- You're using `useEffect` for fetching data
+- You're doing something async inside a component
+- The component **might unmount** before the task finishes
+
+---
+
+## 🔁 TL;DR:
+
+> You only worry about memory leaks when using **async code inside components**.  
+> If you fetch data with `getServerSideProps` or in a global store — you’re safe.  
+> If you're using `useEffect` + `fetch`, always clean it up with `AbortController`.
+
 
 
 ### 🧠 Explanation of how it works:
@@ -986,18 +1168,22 @@ Map v.s. ForEach
 <img width="934" alt="Screenshot 2024-07-07 at 1 53 11 PM" src="https://github.com/mfkimbell/react-typescript-notes/assets/107063397/bc6d66ad-b3ba-4cf4-b59c-b34eb477f3bb">
 
 
-### Props
+## Props
 * passing props down through multiple layers is called prop drilling
 <img width="998" alt="Screenshot 2024-07-07 at 1 54 22 PM" src="https://github.com/mfkimbell/react-typescript-notes/assets/107063397/356d6619-5b3d-4b30-9d18-9f18b0479761">
 
-### Hooks
+## Hooks
+
+<img width="620" alt="Screenshot 2025-04-02 at 7 34 11 PM" src="https://github.com/user-attachments/assets/eeb0a11d-15f3-4871-95da-f4fab2b41f6f" />
+
+<img width="527" alt="Screenshot 2025-04-02 at 7 34 36 PM" src="https://github.com/user-attachments/assets/72e566e2-8d32-47f7-992d-2f98538dae17" />
 
 ## Very useful video about hoooks
 https://www.youtube.com/watch?v=TNhaISOUy6Q
 
 React Hooks are functions that allow you to use state and other React framework specific features without writing a **Class** component. They were introduced in React 16.8 to enable state and side-effect management in functional components, offering a more concise and expressive way to build components compared to class-based components.
 
-#### **useEffect**
+### **useEffect**
 
 * Purpose: Handles side effects such as data fetching, subscriptions, or manually changing the DOM. It runs after the component renders.
 * Syntax: useEffect(() => { /* side effect */ }, [dependencies]);
