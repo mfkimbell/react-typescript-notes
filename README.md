@@ -3,6 +3,8 @@
 
 ## Error handling (and specifics for NextJS SSR error handling)
 
+(error boudnary is only for class components so i didnt spend much time thinking about it)
+
 Absolutely — here’s a tighter version that includes both:
 
 ---
