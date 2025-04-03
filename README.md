@@ -3,6 +3,24 @@
 
 ## Error handling (and specifics for NextJS SSR error handling)
 
+Absolutely — here’s a tighter version that includes both:
+
+---
+
+When you use **`getServerSideProps`**, data is loaded **before** your React component renders.
+
+So if something fails during that process:
+
+- 🛑 Your component never mounts
+- 😬 You can’t use `useState`, `useEffect`, or client-side `try/catch`
+- ✅ Next.js automatically shows the `_error.tsx` page
+
+---
+
+### TL;DR  
+Normal error handling (like `try/catch` + state) works **after** a component renders.  
+For server-side failures, React never runs — so **Next.js catches the error** and shows `_error.tsx` instead.
+
 ## Uncontrolled component
 
 Here's a super concise modern summary for error handling in React/Next.js:
