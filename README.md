@@ -76,6 +76,7 @@ Let me know if you want a flashcard-style version or visual to memorize this fas
 ## performance
 
 React re-renders a component whenever its state or props change.
+Any change to a component’s props or state will cause it to re-render.
 
 Memoization means:
 “If the inputs didn’t change, don’t recalculate — just reuse the last result.”
@@ -309,6 +310,11 @@ export default function HomePage() {
 Lifting state up means moving a piece of useState to a common parent component, so two or more child components can share and update the same state.
 
 AKA we could move `setUsers` and `users` to a parent and pass it to children so  both children could have access to changing users 
+
+#### CAN BE BAD
+
+<img width="751" alt="Screenshot 2025-04-02 at 7 25 08 PM" src="https://github.com/user-attachments/assets/b3e44ef3-28a4-4d49-be84-02a3662c5962" />
+
 
 ## Side Effects
 
