@@ -1,5 +1,6 @@
 # react-typescript-notes
 
+<img width="755" alt="Screenshot 2025-04-03 at 2 42 18 PM" src="https://github.com/user-attachments/assets/ca9f0e27-b628-467c-bf00-39e00ebfebf8" />
 
 ## Error handling (and specifics for NextJS SSR error handling)
 
