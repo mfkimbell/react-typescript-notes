@@ -87,6 +87,34 @@ export default function Counter() {
 }
 ```
 
+When people say **"add interactivity"** in the context of React/Next.js and `'use client'`, it usually means **_the component depends on browser-only features or user-driven interactions_**—which goes beyond just calling a new page on click.
+
+### 🔥 Here's what **requires** `'use client'`:
+- `useState`, `useEffect`, `useRef`, etc. → all React hooks for dynamic logic.
+- User input (`onChange`, `onSubmit`, typing in fields).
+- `onClick` when it triggers:
+  - State changes
+  - DOM mutations
+  - local storage access
+  - window/document usage
+- Stuff like:
+  - Opening/closing modals
+  - Theme toggles (light/dark)
+  - Toasts, notifications
+  - Client-side animations (Framer Motion, etc.)
+
+---
+
+### 😎 What **doesn't** require `'use client'`:
+- A link that just uses `<Link href="/something">` (static routing).
+- Server-rendered pages/components.
+- Displaying data from a database or API via `getServerSideProps` or `fetch()` in a Server Component.
+
+=
+**✅ Exactly.**
+Clicking a button to **navigate** somewhere = 🚫 not interactivity in this context.  
+Clicking a button that **opens a modal, changes state, starts animation, or reads from `localStorage`** = ✅ interactivity.
+
 ---
 
 ### 🔥 Why not make all components client?
