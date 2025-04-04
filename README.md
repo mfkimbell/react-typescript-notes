@@ -1076,7 +1076,11 @@ In simpler terms:
 * Node.js runs JavaScript on one thread.
 
 * When an async task is triggered (e.g., reading a file, querying a database, and other I/O operations), Node offloads that task to a separate threadpool it keeps for IO tasks, freeing the main thread to keep doing other work.
+
+* the `async` keyword wraps a function in a promise, meanin the `result will be a promise` and it will need an `await` later on the value to get the result instead of the promise.
   
+  <img width="790" alt="Screenshot 2025-04-04 at 11 50 56 AM" src="https://github.com/user-attachments/assets/965fa457-efda-4e4c-af62-51fe997d03a2" />
+
 Yes! 🙌 You're absolutely right — these days `we prefer async/await because it's cleaner and easier to read than callbacks`. But under the hood, both are doing async non-blocking I/O.
 
 * Once the operation completes, a callback (or Promise resolution) is queued, and the event loop eventually picks it up and runs it.
