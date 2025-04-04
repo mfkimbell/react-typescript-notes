@@ -1093,6 +1093,16 @@ Async and Await is the more modern way to handle promises:
 
 <img width="796" alt="Screenshot 2025-03-31 at 8 29 29 PM" src="https://github.com/user-attachments/assets/b2f8ba3c-a197-4cd8-9b81-62448ec089b7" />
 
+Could also be done like this without `promise.all`
+
+```javascript
+const userPromise = fetchUser();
+const postsPromise = fetchPosts();
+
+const userResult = await userPromise;
+const postsResult = await postsPromise;
+```
+
 ## Callbacks
 
 A callback is a function that is passed in to be called later, it was the old way of handling delays, we now use async/await
