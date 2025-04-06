@@ -1,4 +1,23 @@
 # react-typescript-notes
+```
+export function Providers({ children }: { children: React.ReactNode }) {
+  return <Provider store={store}>{children}</Provider>;
+}
+```
+
+imports like `import { Providers } from './providers';`
+
+this is because we could export MULTIPLE THINGS
+
+when we use `default` we are exporting ONE thing
+
+```
+export default function Providers({ children }: { children: React.ReactNode }) {
+  return <Provider store={store}>{children}</Provider>;
+}
+```
+
+imports like `import Providers from './providers';`
 
 ## NextJS updates
 
