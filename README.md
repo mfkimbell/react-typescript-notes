@@ -1,4 +1,16 @@
+
+
 # react-typescript-notes
+
+
+
+JavaScript is concurrent, not truly parallel (on the main thread).
+But Node.js enables parallelism under the hood via its I/O thread pool.
+
+so async/I/O tasks are get put on the callback queue, and the promise object get fufilled whenever the other threadpool finishes with them. After that point the promises will have real results (or errors)
+
+remember, making something async wraps it in a promise
+
 ```
 export function Providers({ children }: { children: React.ReactNode }) {
   return <Provider store={store}>{children}</Provider>;
